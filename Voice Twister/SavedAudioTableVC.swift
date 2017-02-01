@@ -18,15 +18,22 @@ enum AudioStyle: String {
     case Custom = "Custom"
 }
 
+class SavedAudioCell: UITableViewCell {
+    @IBOutlet weak var thumbnailImageView: UIImageView?
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
+}
+
 class SavedAudioTableVC: UITableViewController {
     
     let appDel = UIApplication.shared.delegate as! AppDelegate
     
     var audioFiles = [RecordedAudio]()
     var editButton = UIBarButtonItem()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        tableView.rowHeight = 50
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -93,12 +100,12 @@ extension SavedAudioTableVC {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SavedAudioCell")!
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SavedAudioCell") as! SavedAudioCell
         let audio = audioFiles[indexPath.row]
-        cell.textLabel?.text = audio.title
-        cell.detailTextLabel?.text = formatTimestamp(date: audio.timestamp as! Date, desiredFormat: "MMM dd, yyyy")
+        cell.titleLabel.text = audio.title
+        cell.dateLabel.text = formatTimestamp(date: audio.timestamp as! Date, desiredFormat: "MMM dd, yyyy")
         let style = AudioStyle(rawValue: audio.style ?? "Custom")
-        cell.imageView?.image = setImageForCell(style: style!)
+        cell.thumbnailImageView?.image = setImageForCell(style: style!)
         return cell
     }
     

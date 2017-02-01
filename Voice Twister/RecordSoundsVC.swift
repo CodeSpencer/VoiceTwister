@@ -18,20 +18,20 @@ class RecordSoundsVC: UIViewController, AVAudioRecorderDelegate {
     var beginText = "Tap To Record"
     var recordingText = "Recording In Progress"
     var timestamp = ""
-    @IBOutlet weak var recordButton: UIButton!
+    @IBOutlet weak var titleField: UITextField!
+    @IBOutlet weak var recordButton: UIBarButtonItem!
     @IBOutlet weak var recordingInProgress: UILabel!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         recordButton.isEnabled = true
         recordingInProgress.text = beginText
-        recordButton.setImage(UIImage(named: "stop_button"), for: .selected)
     }
 
     @IBAction func recordAudioButtonTapped(_ sender: UIButton) {
         if recordingInProgress.text == beginText {
             recordingInProgress.text = recordingText
-            
+            recordButton.image = UIImage(named: "stop button")!
             let documents = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
             let date = Date()
             let formatter = DateFormatter()
@@ -77,7 +77,7 @@ class RecordSoundsVC: UIViewController, AVAudioRecorderDelegate {
                 let recordedAudio = NSManagedObject(entity: entity, insertInto: context)
                 recordedAudio.setValue(NSDate(), forKey: "timestamp")
                 recordedAudio.setValue("\(timestamp).wav", forKey: "filePathUrl")
-                recordedAudio.setValue("No Title", forKey: "title")
+                recordedAudio.setValue(titleField.text!, forKey: "title")
                 recordedAudio.setValue("Custom", forKey: "style")
                 appDel.saveContext()
             }
@@ -87,7 +87,7 @@ class RecordSoundsVC: UIViewController, AVAudioRecorderDelegate {
             navigationController?.pushViewController(playSoundsVC, animated: true)
         }else{
             print("recording was not successful")
-            recordButton.setImage(UIImage(named: "microphone"), for: .normal)
+            recordButton.image = UIImage(named: "microphone")
         }
     }
     
