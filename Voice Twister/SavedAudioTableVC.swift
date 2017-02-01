@@ -23,7 +23,7 @@ class SavedAudioTableVC: UITableViewController {
     let appDel = UIApplication.shared.delegate as! AppDelegate
     
     var audioFiles = [RecordedAudio]()
-    
+    var editButton = UIBarButtonItem()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,7 +31,21 @@ class SavedAudioTableVC: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        editButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(editItems))
+        navigationItem.leftBarButtonItem = editButton
         fetchSavedAudio()
+    }
+    
+    func editItems() {
+        tableView.setEditing(true, animated: true)
+        editButton.title = "Done"
+        editButton.action = #selector(doneEditing)
+    }
+    
+    func doneEditing() {
+        tableView.setEditing(false, animated: true)
+        editButton.title = "Edit"
+        editButton.action = #selector(editItems)
     }
     
     func fetchSavedAudio() {
@@ -99,4 +113,14 @@ extension SavedAudioTableVC {
         return true
     }
     
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let action = UITableViewRowAction(style: .destructive, title: "Delete") {_ in
+            self.appDel.deleteRecording(recordedAudio: self.audioFiles[indexPath.row])
+            self.audioFiles.remove(at: indexPath.row)
+            self.tableView.beginUpdates()
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            self.tableView.endUpdates()
+        }
+        return [action]
+    }
 }

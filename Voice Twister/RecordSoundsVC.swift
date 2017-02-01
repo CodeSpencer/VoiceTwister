@@ -79,12 +79,7 @@ class RecordSoundsVC: UIViewController, AVAudioRecorderDelegate {
                 recordedAudio.setValue("\(timestamp).wav", forKey: "filePathUrl")
                 recordedAudio.setValue("No Title", forKey: "title")
                 recordedAudio.setValue("Custom", forKey: "style")
-                
-                do {
-                    try context.save()
-                } catch {
-                    print("Unable to save context of new audio recording")
-                }
+                appDel.saveContext()
             }
             
             let playSoundsVC = storyboard?.instantiateViewController(withIdentifier: "PlaySoundsVC") as! PlaySoundsVC
