@@ -32,11 +32,14 @@ class RecordSoundsVC: UIViewController, AVAudioRecorderDelegate {
             recordingInProgress.text = recordingText
             
             let dirPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
-            let timestamp = NSDate()
-            let recordingName = "my_audio.wav"
+            let date = Date()
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMM-dd-yyy"
+            let timestamp = formatter.string(from: date)
+            let recordingName = "/\(timestamp)/my_audio.wav"
     //        let pathArray = [dirPath, recordingName]
     //        let filePath = URL.fileURL(withPathComponents: pathArray)
-            let filePath = URL(fileURLWithPath: dirPath).appendingPathComponent(recordingName)
+            let filePath = URL(fileURLWithPath: dirPath + recordingName)
             let session = AVAudioSession.sharedInstance()
             try! session.setCategory(AVAudioSessionCategoryPlayAndRecord)
             try! audioRecorder = AVAudioRecorder(url: filePath, settings: [:])
