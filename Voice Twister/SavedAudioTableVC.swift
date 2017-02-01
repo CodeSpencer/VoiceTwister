@@ -24,6 +24,11 @@ class SavedAudioTableVC: UITableViewController {
     
     var audioFiles = [RecordedAudio]()
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchSavedAudio()

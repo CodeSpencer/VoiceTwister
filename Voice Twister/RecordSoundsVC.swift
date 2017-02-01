@@ -17,6 +17,7 @@ class RecordSoundsVC: UIViewController, AVAudioRecorderDelegate {
     var recordedAudio: RecordedAudio!
     var beginText = "Tap To Record"
     var recordingText = "Recording In Progress"
+    var timestamp = ""
     @IBOutlet weak var recordButton: UIButton!
     @IBOutlet weak var recordingInProgress: UILabel!
     
@@ -31,18 +32,27 @@ class RecordSoundsVC: UIViewController, AVAudioRecorderDelegate {
         if recordingInProgress.text == beginText {
             recordingInProgress.text = recordingText
             
-            let dirPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
+            let documents = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as String
             let date = Date()
             let formatter = DateFormatter()
-            formatter.dateFormat = "MMM-dd-yyy"
-            let timestamp = formatter.string(from: date)
-            let recordingName = "/\(timestamp)/my_audio.wav"
-    //        let pathArray = [dirPath, recordingName]
-    //        let filePath = URL.fileURL(withPathComponents: pathArray)
-            let filePath = URL(fileURLWithPath: dirPath + recordingName)
+            formatter.dateFormat = "MMM-dd-yyy-HH:MM:SS"
+            timestamp = formatter.string(from: date)
+            let recordingName = "\(timestamp).wav"
+            let filePath = URL(fileURLWithPath: documents).appendingPathComponent(recordingName)
             let session = AVAudioSession.sharedInstance()
-            try! session.setCategory(AVAudioSessionCategoryPlayAndRecord)
-            try! audioRecorder = AVAudioRecorder(url: filePath, settings: [:])
+            
+            do {
+               try session.setCategory(AVAudioSessionCategoryPlayAndRecord)
+            } catch {
+                print("Session could not set category")
+            }
+            
+            do {
+                try audioRecorder = AVAudioRecorder(url: filePath, settings: [:])
+            } catch {
+                print("audio recorder did not initialize")
+            }
+            
             audioRecorder.delegate = self
             audioRecorder.isMeteringEnabled = true
             audioRecorder.prepareToRecord()
@@ -51,7 +61,12 @@ class RecordSoundsVC: UIViewController, AVAudioRecorderDelegate {
             recordingInProgress.text = beginText
             audioRecorder.stop()
             let audioSession = AVAudioSession.sharedInstance()
-            try! audioSession.setActive(false)
+            
+            do {
+                try audioSession.setActive(false)
+            } catch {
+                print("Could not deactivate audio session")
+            }
         }
     }
 
@@ -61,7 +76,7 @@ class RecordSoundsVC: UIViewController, AVAudioRecorderDelegate {
             if let entity = NSEntityDescription.entity(forEntityName: "RecordedAudio", in: context) {
                 let recordedAudio = NSManagedObject(entity: entity, insertInto: context)
                 recordedAudio.setValue(NSDate(), forKey: "timestamp")
-                recordedAudio.setValue(recorder.url.absoluteString, forKey: "filePathUrl")
+                recordedAudio.setValue("\(timestamp).wav", forKey: "filePathUrl")
                 recordedAudio.setValue("No Title", forKey: "title")
                 recordedAudio.setValue("Custom", forKey: "style")
                 
@@ -73,7 +88,7 @@ class RecordSoundsVC: UIViewController, AVAudioRecorderDelegate {
             }
             
             let playSoundsVC = storyboard?.instantiateViewController(withIdentifier: "PlaySoundsVC") as! PlaySoundsVC
-            playSoundsVC.receivedAudioUrl = recorder.url.description
+            playSoundsVC.receivedAudioUrl = recorder.url.lastPathComponent
             navigationController?.pushViewController(playSoundsVC, animated: true)
         }else{
             print("recording was not successful")
@@ -83,6 +98,14 @@ class RecordSoundsVC: UIViewController, AVAudioRecorderDelegate {
     
     func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
         print("Error")
+    }
+    
+    @IBAction func deleteRecording() {
+        if audioRecorder.deleteRecording() {
+            print("SUCCESSFUL DELETE")
+        } else {
+            print("FAILED DELETE")
+        }
     }
 }
 

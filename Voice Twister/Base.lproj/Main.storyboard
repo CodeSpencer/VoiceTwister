@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1212" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="v3w-A1-n4R">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1217" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="v3w-A1-n4R">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -14,7 +14,7 @@
         <!--Saved Audio-->
         <scene sceneID="wPF-Vd-LuU">
             <objects>
-                <tableViewController id="15D-cp-VQo" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="SavedAudioTableVC" id="15D-cp-VQo" customClass="SavedAudioTableVC" customModule="VoiceTwister" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="4eW-I6-c86">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -41,7 +41,7 @@
                                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" image="microphone" id="z94-j9-xNy">
+                                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="microphone" id="z94-j9-xNy">
                                             <rect key="frame" x="15" y="0.0" width="43" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </imageView>
@@ -69,7 +69,7 @@
         <!--Record-->
         <scene sceneID="aL1-3T-892">
             <objects>
-                <viewController storyboardIdentifier="RecordSoundsVC" id="40Q-Wj-hY0" customClass="RecordSoundsVC" customModule="Voice_Twister" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="RecordSoundsVC" id="40Q-Wj-hY0" customClass="RecordSoundsVC" customModule="VoiceTwister" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="4wx-0e-ZSL"/>
                         <viewControllerLayoutGuide type="bottom" id="5IH-Hh-u3I"/>
@@ -118,7 +118,7 @@
         <!--Play SoundsVC-->
         <scene sceneID="8C3-WG-TqH">
             <objects>
-                <viewController storyboardIdentifier="PlaySoundsVC" id="jUG-jC-Xuq" customClass="PlaySoundsVC" customModule="Voice_Twister" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="PlaySoundsVC" id="jUG-jC-Xuq" customClass="PlaySoundsVC" customModule="VoiceTwister" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="s6E-rG-hT2"/>
                         <viewControllerLayoutGuide type="bottom" id="i6G-YB-46v"/>

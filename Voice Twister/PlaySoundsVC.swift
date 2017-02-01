@@ -19,13 +19,16 @@ class PlaySoundsVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print(receivedAudioUrl)
-        let audioUrl = URL(fileURLWithPath: receivedAudioUrl)
-        audioPlayer = try! AVAudioPlayer(contentsOf: audioUrl)
+        let documents = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        let audioUrl = URL(fileURLWithPath: documents).appendingPathComponent(receivedAudioUrl)
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: audioUrl, fileTypeHint: ".wav")
+        } catch {
+            print("Could not locate file path")
+        }
         audioPlayer.enableRate = true
-        
         audioEngine = AVAudioEngine()
         audioFile = try! AVAudioFile(forReading: audioUrl)
-        
     }
     
     @IBAction func playRecordingSlow(_ sender: UIButton) {
@@ -40,6 +43,7 @@ class PlaySoundsVC: UIViewController {
         stopAudio()
         audioPlayer.currentTime = 0.0
         audioPlayer.rate = rate
+        audioPlayer.setVolume(5.0, fadeDuration: 0.5)
         audioPlayer.play()
     }
     
